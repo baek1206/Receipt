@@ -5,19 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>매물 접수 폼</title>
   <style>
-    body { font-family: 'Pretendard', sans-serif; background:#f9fafb; padding:20px; }
-    form { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); max-width:500px; margin:auto; }
-    input, textarea, select { width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd; font-size:15px; }
-    button { width:100%; background:#2b6cb0; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer; font-size:16px; }
-    button:hover { background:#1a4e85; }
-    h2 { text-align:center; margin-bottom:20px; }
+    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background: linear-gradient(to bottom right, rgba(0, 60, 120, 0.5), rgba(0, 0, 0, 0.7)),
+                  url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+      background-attachment: fixed;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    form {
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 480px;
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 1.6em;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+      margin-top: 10px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-bottom: 12px;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #222;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #2b6cb0, #1a4e85);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #377ed6, #20599a);
+      transform: translateY(-2px);
+    }
+
+    option[value=""] {
+      color: gray;
+    }
   </style>
 </head>
 <body>
-  <h2>🏠 매물 접수하기</h2>
   <form id="listingForm">
-    
-    <!-- 1. 매물 구분 -->
+    <h2>🏠 매물 접수하기</h2>
+
     <label for="dealType">매물 구분</label>
     <select id="dealType" required>
       <option value="">선택하세요</option>
@@ -25,13 +95,11 @@
       <option value="임대">임대</option>
     </select>
 
-    <!-- 2. 접수자 (매물 구분 따라 변경됨) -->
     <label for="submitter">접수자</label>
     <select id="submitter" required>
       <option value="">매물 구분을 먼저 선택하세요</option>
     </select>
 
-    <!-- 3. 매물 종류 -->
     <label for="propertyType">매물 종류</label>
     <select id="propertyType" required>
       <option value="">선택하세요</option>
@@ -43,10 +111,17 @@
       <option value="기타">기타</option>
     </select>
 
-    <input type="text" id="name" placeholder="성함(상호명)" required>
-    <input type="text" id="phone" placeholder="연락처" required>
-    <input type="text" id="address" placeholder="매물 주소(건물명,동,호수)" required>
-    <textarea id="details" placeholder="추가 설명 (매매가, 임대가, 옵션, 입주 가능일 등)" rows="4"></textarea>
+    <label for="name">성함</label>
+    <input type="text" id="name" placeholder="예: 홍길동, 업체:상호명" required>
+
+    <label for="phone">연락처</label>
+    <input type="text" id="phone" placeholder="예: 010-1234-5678" required>
+
+    <label for="address">매물 주소</label>
+    <input type="text" id="address" placeholder="예: 성남시 수정구 고등로 33 판교밸리포레자이아파트 OOO동 OOO호" required>
+
+    <label for="details">추가 설명</label>
+    <textarea id="details" placeholder="옵션, 입주 가능일 등 추가 정보" rows="4"></textarea>
 
     <button type="submit">매물 접수</button>
   </form>
@@ -58,11 +133,9 @@
     const dealTypeSelect = document.getElementById("dealType");
     const submitterSelect = document.getElementById("submitter");
 
-    // 매물 구분 선택 시 접수자 리스트 변경
     dealTypeSelect.addEventListener("change", () => {
       const type = dealTypeSelect.value;
-      submitterSelect.innerHTML = '<option value="">선택하세요</option>'; // 초기화
-
+      submitterSelect.innerHTML = '<option value="">선택하세요</option>';
       if (type === "매매") {
         submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
       } else if (type === "임대") {
