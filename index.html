@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>매물 접수 폼 — 부동산 접수</title>
+  <style>
+    body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,'Noto Sans KR',sans-serif;margin:0;background:#f6f7fb;color:#111}
+    .wrap{max-width:760px;margin:36px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 6px 24px rgba(12,20,40,0.06)}
+    h1{font-size:20px;margin:0 0 8px}
+    p.lead{margin:0 0 18px;color:#555}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input[type=text], input[type=tel], input[type=number], textarea, select{width:100%;padding:10px;border:1px solid #e6e8ef;border-radius:8px;font-size:14px}
+    textarea{min-height:110px;resize:vertical}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .files-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .files-preview img{width:96px;height:72px;object-fit:cover;border-radius:6px;border:1px solid #ddd}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:0;background:#2563eb;color:#fff;font-weight:600;cursor:pointer}
+    .btn--muted{background:#e6edf9;color:#124}
+    .hint{font-size:13px;color:#666;margin-top:6px}
+    .result{margin-top:12px;padding:12px;border-radius:8px;font-weight:600}
+    .result.success{background:#eefcf1;color:#0b6b2e}
+    .result.error{background:#fff6f6;color:#8a1f1f}
+    footer{margin-top:18px;font-size:13px;color:#666}
+    .small{font-size:12px;color:#888}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>매물 접수하기</h1>
+    <p class="lead">QR 코드로 연결되는 간단한 매물 접수 폼입니다. 스캔하면 사진 포함하여 매물 정보를 바로 보낼 수 있어요.</p>
+
+    <!-- 중요: WEBHOOK_URL을 배포한 서버(또는 Google Apps Script Web App URL)로 바꾸세요 -->
+    <!-- 비워두면 메일 전송(fallback) 동작을 사용합니다 -->
+    <script>const WEBHOOK_URL = ""; // <-- 여기에 수신용 엔드포인트 URL을 넣으세요</script>
+
+    <form id="listingForm">
+      <label>등록자 이름</label>
+      <input type="text" name="sender" placeholder="예: 홍길동" required />
+
+      <label class="row"><span class="col">연락처</span><span class="col small">(휴대폰)</span></label>
+      <input type="tel" name="phone" placeholder="010-1234-5678" required />
+
+      <label>주소 (도로명/지번)</label>
+      <input type="text" name="address" placeholder="예: 성남시 수정구 고등로 33" required />
+
+      <div class="row">
+        <div class="col">
+          <label>매물 종류</label>
+          <select name="type">
+            <option value="아파트">아파트</option>
+            <option value="연립/다세대">연립/다세대</option>
+            <option value="단독주택">단독주택</option>
+            <option value="상가">상가</option>
+            <option value="토지">토지</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>가격(만원)</label>
+          <input type="number" name="price" placeholder="예: 45000 (만원 단위)" />
+        </div>
+      </div>
+
+      <label>상세 설명 / 특징</label>
+      <textarea name="note" placeholder="방 개수, 면적, 층수, 주차, 인근 교통 등"></textarea>
+
+      <label>사진 (최대 6장)</label>
+      <input id="photos" type="file" accept="image/*" multiple />
+      <div class="files-preview" id="preview"></div>
+      <div class="hint">파일은 서버(Webhook)로 전송됩니다. 서버 미설정 시 메일로 전송됩니다.</div>
+
+      <div style="margin-top:16px">
+        <button type="submit" class="btn">전송</button>
+        <button type="button" id="clearBtn" class="btn btn--muted">초기화</button>
+      </div>
+
+      <div id="resultArea"></div>
+    </form>
+
+    <footer>
+      <div class="small">설치/배포 안내: 이 HTML 파일을 GitHub Pages 또는 Netlify 등에 올리면 간편하게 URL을 얻을 수 있습니다.</div>
+    </footer>
+  </div>
+
+  <script>
+    // 간단한 폼 동작 스크립트
+    const form = document.getElementById('listingForm');
+    const photos = document.getElementById('photos');
+    const preview = document.getElementById('preview');
+    const resultArea = document.getElementById('resultArea');
+    const clearBtn = document.getElementById('clearBtn');
+
+    photos.addEventListener('change', ()=>{
+      preview.innerHTML = '';
+      const files = Array.from(photos.files).slice(0,6);
+      files.forEach(f=>{
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(f);
+        preview.appendChild(img);
+      });
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      form.reset(); preview.innerHTML=''; resultArea.innerHTML='';
+    });
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      resultArea.innerHTML = '';
+      const fd = new FormData(form);
+      const files = Array.from(photos.files).slice(0,6);
+      files.forEach((f,i)=> fd.append('photo' + (i+1), f));
+
+      // 1) Webhook가 설정되어 있으면 JSON/FormData로 POST
+      if(typeof WEBHOOK_URL === 'string' && WEBHOOK_URL.trim().length>5){
+        try{
+          const res = await fetch(WEBHOOK_URL, {method:'POST', body:fd});
+          if(res.ok){
+            resultArea.innerHTML = '<div class="result success">전송 완료 — 서버에서 접수되었습니다.</div>';
+            form.reset(); preview.innerHTML='';
+          } else {
+            const text = await res.text();
+            resultArea.innerHTML = '<div class="result error">서버 오류: '+res.status+' '+(text||'')+'</div>';
+          }
+        }catch(err){
+          resultArea.innerHTML = '<div class="result error">네트워크 에러: '+err.message+'</div>';
+        }
+        return;
+      }
+
+      // 2) Webhook 미설정 시: 메일 클라이언트로 전송(간단한 fallback)
+      try{
+        const data = Object.fromEntries(new FormData(form).entries());
+        let body = '';
+        for(const k in data) body += k + ': ' + data[k] + '\n';
+        body += '\n(사진은 첨부되지 않습니다. 사진을 전송하려면 관리자에게 직접 전송하세요.)';
+        const mailto = 'mailto:your-email@example.com?subject='+encodeURIComponent('[매물접수] '+(data.address||'새 매물'))+'&body='+encodeURIComponent(body);
+        // mailto로 이동하면 사용자의 메일앱이 열립니다.
+        window.location.href = mailto;
+      }catch(e){
+        resultArea.innerHTML = '<div class="result error">전송 실패: '+e.message+'</div>';
+      }
+    });
+  </script>
+
+  <!-- 사용 가이드 (간단)
+    1) WEBHOOK_URL을 설정하여 서버(또는 Google Apps Script Web App)로 POST 받기.
+       - 폼은 multipart/form-data로 전송합니다. 서버에서 각 필드와 첨부파일(photo1..photo6)을 받으세요.
+    2) 서버가 없으면 파일을 비워두고 mailto: 주소(your-email@example.com)를 변경하여 이메일로 접수받는 임시 운영 가능.
+    3) 파일 수신/저장과 자동 알림(텔레그램/카카오/슬랙 등)은 서버(또는 Firebase)에 구현하세요.
+    4) 이 HTML 파일을 호스팅한 URL을 QR 코드로 만들어 광고에 사용하세요.
+       - 간단 QR API 예: https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=<URL>
+
+    추가로 원하시면
+      - Google Sheets로 자동 저장하는 Google Apps Script 템플릿 (앱스스크립트 코드) 제공
+      - Firebase(인증 없음)로 사진 업로드 + Firestore에 메타정보 저장 예시 제공
+      - 전송 후 자동 채팅/텔레그램 알림 연결 예시 제공
+    말씀만 하세요. -->
+</body>
+</html>
