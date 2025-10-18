@@ -43,10 +43,10 @@
       <option value="기타">기타</option>
     </select>
 
-    <input type="text" id="name" placeholder="성함" required>
+    <input type="text" id="name" placeholder="성함(상호명)" required>
     <input type="text" id="phone" placeholder="연락처" required>
-    <input type="text" id="address" placeholder="매물 주소" required>
-    <textarea id="details" placeholder="추가 설명 (옵션, 입주 가능일 등)" rows="4"></textarea>
+    <input type="text" id="address" placeholder="매물 주소(건물명,동,호수)" required>
+    <textarea id="details" placeholder="추가 설명 (매매가, 임대가, 옵션, 입주 가능일 등)" rows="4"></textarea>
 
     <button type="submit">매물 접수</button>
   </form>
@@ -80,4 +80,28 @@
       const submitter = document.getElementById("submitter").value;
       const propertyType = document.getElementById("propertyType").value;
       const name = document.getElementById("name").value;
-      const phone = document.getElementById("phon
+      const phone = document.getElementById("phone").value;
+      const address = document.getElementById("address").value;
+      const details = document.getElementById("details").value;
+
+      const message = `📬 [매물 접수]\n\n🏷️ 매물 구분: ${dealType}\n👤 접수자: ${submitter}\n🏠 매물 종류: ${propertyType}\n📍 주소: ${address}\n👔 이름: ${name}\n📞 연락처: ${phone}\n📝 내용: ${details}`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      })
+      .then(res => res.json())
+      .then(() => {
+        alert("✅ 매물 접수가 완료되었습니다!");
+        document.getElementById("listingForm").reset();
+        submitterSelect.innerHTML = '<option value="">매물 구분을 먼저 선택하세요</option>';
+      })
+      .catch(err => {
+        alert("❌ 전송 중 오류가 발생했습니다.");
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
