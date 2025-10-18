@@ -7,19 +7,47 @@
   <style>
     body { font-family: 'Pretendard', sans-serif; background:#f9fafb; padding:20px; }
     form { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); max-width:500px; margin:auto; }
-    input, textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd; }
+    input, textarea, select { width:100%; padding:10px; margin-bottom:10px; border-radius:8px; border:1px solid #ddd; font-size:15px; }
     button { width:100%; background:#2b6cb0; color:white; padding:12px; border:none; border-radius:8px; cursor:pointer; font-size:16px; }
     button:hover { background:#1a4e85; }
+    h2 { text-align:center; margin-bottom:20px; }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;">🏠 매물 접수하기</h2>
+  <h2>🏠 매물 접수하기</h2>
   <form id="listingForm">
+    
+    <!-- 1. 매물 구분 -->
+    <label for="dealType">매물 구분</label>
+    <select id="dealType" required>
+      <option value="">선택하세요</option>
+      <option value="매매">매매</option>
+      <option value="임대">임대</option>
+    </select>
+
+    <!-- 2. 접수자 (매물 구분 따라 변경됨) -->
+    <label for="submitter">접수자</label>
+    <select id="submitter" required>
+      <option value="">매물 구분을 먼저 선택하세요</option>
+    </select>
+
+    <!-- 3. 매물 종류 -->
+    <label for="propertyType">매물 종류</label>
+    <select id="propertyType" required>
+      <option value="">선택하세요</option>
+      <option value="아파트">아파트</option>
+      <option value="오피스텔">오피스텔</option>
+      <option value="다가구주택">다가구주택</option>
+      <option value="상가">상가</option>
+      <option value="사무실">사무실</option>
+      <option value="기타">기타</option>
+    </select>
+
     <input type="text" id="name" placeholder="성함" required>
     <input type="text" id="phone" placeholder="연락처" required>
     <input type="text" id="address" placeholder="매물 주소" required>
-    <input type="text" id="type" placeholder="매물 종류 (예: 아파트, 상가 등)" required>
     <textarea id="details" placeholder="추가 설명 (옵션, 입주 가능일 등)" rows="4"></textarea>
+
     <button type="submit">매물 접수</button>
   </form>
 
@@ -27,32 +55,29 @@
     const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
     const CHAT_ID = "5878163526";
 
+    const dealTypeSelect = document.getElementById("dealType");
+    const submitterSelect = document.getElementById("submitter");
+
+    // 매물 구분 선택 시 접수자 리스트 변경
+    dealTypeSelect.addEventListener("change", () => {
+      const type = dealTypeSelect.value;
+      submitterSelect.innerHTML = '<option value="">선택하세요</option>'; // 초기화
+
+      if (type === "매매") {
+        submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
+      } else if (type === "임대") {
+        submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
+        submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
+      } else {
+        submitterSelect.innerHTML = '<option value="">매물 구분을 먼저 선택하세요</option>';
+      }
+    });
+
     document.getElementById("listingForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
+      const dealType = document.getElementById("dealType").value;
+      const submitter = document.getElementById("submitter").value;
+      const propertyType = document.getElementById("propertyType").value;
       const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const address = document.getElementById("address").value;
-      const type = document.getElementById("type").value;
-      const details = document.getElementById("details").value;
-
-      const message = `📬 [매물 접수]\n\n👤 이름: ${name}\n📞 연락처: ${phone}\n🏠 주소: ${address}\n🏷️ 종류: ${type}\n📝 내용: ${details}`;
-
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert("✅ 매물 접수가 완료되었습니다!");
-        document.getElementById("listingForm").reset();
-      })
-      .catch(err => {
-        alert("❌ 전송 중 오류가 발생했습니다.");
-        console.error(err);
-      });
-    });
-  </script>
-</body>
-</html>
+      const phone = document.getElementById("phon
