@@ -41,20 +41,8 @@
     .agency-info {
       text-align: center;
       line-height: 1.6;
-      font-size: 16px;
+      font-size: 15px;
       margin-bottom: 20px;
-    }
-
-    .agency-info .highlight {
-      color: #FFD700; /* 노란색 */
-      font-weight: 700;
-      font-size: 20px; /* 강조 글씨 크기 */
-    }
-
-    /* 전화번호 스타일 */
-    .agency-info a {
-      color: #fff;           /* 흰색으로 유지 */
-      text-decoration: none; /* 밑줄 제거 */
     }
 
     form {
@@ -115,7 +103,6 @@
     option[value=""] {
       color: gray;
     }
-
   </style>
 </head>
 <body>
@@ -180,7 +167,6 @@
 
     const dealTypeSelect = document.getElementById("dealType");
     const submitterSelect = document.getElementById("submitter");
-    const propertyTypeSelect = document.getElementById("propertyType");
 
     dealTypeSelect.addEventListener("change", () => {
       const type = dealTypeSelect.value;
@@ -193,17 +179,18 @@
       }
     });
 
-    document.getElementById("listingForm").addEventListener("submit", async function(e) {
+    document.getElementById("listingForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      if (!dealTypeSelect.value || !submitterSelect.value || !propertyTypeSelect.value) {
+      // 필수 체크
+      if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
         alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
         return;
       }
 
       const dealType = dealTypeSelect.value;
       const submitter = submitterSelect.value;
-      const propertyType = propertyTypeSelect.value;
+      const propertyType = document.getElementById("propertyType").value;
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
       const address = document.getElementById("address").value;
@@ -223,9 +210,21 @@
 📝 내용:
 ${details}`;
 
-      try {
-        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
-        });
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      })
+      .then(() => {
+        alert("✅ 매물 접수가 완료되었습니다!");
+        document.getElementById("listingForm").reset();
+        submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
+      })
+      .catch(err => {
+        alert("❌ 전송 중 오류가 발생했습니다.");
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
