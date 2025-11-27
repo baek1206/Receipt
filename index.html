@@ -26,7 +26,6 @@
       max-width: 500px;
     }
 
-    /* 📌 사무소 정보 박스와 매물 접수폼 동일 크기 적용 */
     .agency-info,
     form {
       width: 100%;
@@ -65,10 +64,9 @@
       margin-top: 10px;
     }
 
-    /* 📌 모든 입력창과 선택창 폭, 높이, 패딩 통일 */
     input, textarea, select {
       width: 100%;
-      box-sizing: border-box; /* padding + border 포함한 실제 폭 */
+      box-sizing: border-box;
       padding: 12px;
       border-radius: 10px;
       border: none;
@@ -81,7 +79,7 @@
 
     textarea {
       resize: none;
-      height: 90px; /* input 높이와 비슷하게 */
+      height: 90px;
     }
 
     button {
@@ -111,7 +109,6 @@
 
   <div class="container">
 
-    <!-- 📌 사무소 정보 영역 -->
     <div class="agency-info">
       <strong style="font-size:17px;">포레자이우리공인중개사사무소</strong><br>
       대표: 백성욱<br>
@@ -119,25 +116,24 @@
       H.P : 010-8521-4343
     </div>
 
-    <!-- 📌 매물 접수폼 -->
     <form id="listingForm">
       <h2>🏠 매물 접수하기</h2>
 
       <label for="dealType">매물 구분</label>
       <select id="dealType" required>
-        <option value="">선택하세요</option>
+        <option value="" disabled selected>선택하세요</option>
         <option value="매매">매매</option>
         <option value="임대">임대</option>
       </select>
 
       <label for="submitter">접수자</label>
       <select id="submitter" required>
-        <option value="">매물 구분을 먼저 선택하세요</option>
+        <option value="" disabled selected>매물 구분을 먼저 선택하세요</option>
       </select>
 
       <label for="propertyType">매물 종류</label>
       <select id="propertyType" required>
-        <option value="">선택하세요</option>
+        <option value="" disabled selected>선택하세요</option>
         <option value="아파트">아파트</option>
         <option value="오피스텔">오피스텔</option>
         <option value="다가구주택">다가구주택</option>
@@ -172,22 +168,26 @@
 
     dealTypeSelect.addEventListener("change", () => {
       const type = dealTypeSelect.value;
-      submitterSelect.innerHTML = '<option value="">선택하세요</option>';
+      submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
       if (type === "매매") {
         submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
       } else if (type === "임대") {
         submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
         submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
-      } else {
-        submitterSelect.innerHTML = '<option value="">매물 구분을 먼저 선택하세요</option>';
       }
     });
 
     document.getElementById("listingForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const dealType = document.getElementById("dealType").value;
-      const submitter = document.getElementById("submitter").value;
+      // 필수 체크
+      if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
+        alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
+        return;
+      }
+
+      const dealType = dealTypeSelect.value;
+      const submitter = submitterSelect.value;
       const propertyType = document.getElementById("propertyType").value;
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
@@ -215,3 +215,14 @@ ${details}`;
       })
       .then(() => {
         alert("✅ 매물 접수가 완료되었습니다!");
+        document.getElementById("listingForm").reset();
+        submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
+      })
+      .catch(err => {
+        alert("❌ 전송 중 오류가 발생했습니다.");
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
