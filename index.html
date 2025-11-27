@@ -41,8 +41,20 @@
     .agency-info {
       text-align: center;
       line-height: 1.6;
-      font-size: 15px;
+      font-size: 16px;
       margin-bottom: 20px;
+    }
+
+    .agency-info .highlight {
+      color: #FFD700; /* 노란색 */
+      font-weight: 700;
+      font-size: 20px; /* 강조 글씨 크기 */
+    }
+
+    /* 전화번호 스타일 */
+    .agency-info a {
+      color: #fff;           /* 흰색으로 유지 */
+      text-decoration: none; /* 밑줄 제거 */
     }
 
     form {
@@ -103,6 +115,7 @@
     option[value=""] {
       color: gray;
     }
+
   </style>
 </head>
 <body>
@@ -169,7 +182,6 @@
     const submitterSelect = document.getElementById("submitter");
     const propertyTypeSelect = document.getElementById("propertyType");
 
-    // 매물 구분 선택 시 접수자 옵션 변경
     dealTypeSelect.addEventListener("change", () => {
       const type = dealTypeSelect.value;
       submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
@@ -181,11 +193,9 @@
       }
     });
 
-    // 폼 제출 이벤트
     document.getElementById("listingForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
-      // 필수 체크
       if (!dealTypeSelect.value || !submitterSelect.value || !propertyTypeSelect.value) {
         alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
         return;
@@ -219,21 +229,3 @@ ${details}`;
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
         });
-
-        const data = await response.json();
-        if (data.ok) {
-          alert("✅ 매물 접수가 완료되었습니다!");
-          document.getElementById("listingForm").reset();
-          submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
-        } else {
-          console.error(data);
-          alert("❌ 전송 중 오류가 발생했습니다. 토큰과 채팅ID를 확인하세요.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("❌ 전송 중 네트워크 오류가 발생했습니다.");
-      }
-    });
-  </script>
-</body>
-</html>
