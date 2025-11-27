@@ -1,223 +1,184 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>매물 접수 폼</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
-
+<meta charset="UTF-8">
+<title>매물 접수</title>
+<style>
     body {
-      font-family: 'Pretendard', sans-serif;
-      background: linear-gradient(to bottom right, rgba(0, 60, 120, 0.5), rgba(0, 0, 0, 0.7)),
-                  url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1950&q=80') 
-                  no-repeat center center/cover;
-      background-attachment: fixed;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 20px;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #e3f2fd, #ffffff);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
     }
 
+    /* 전체 컨테이너 */
+    .wrapper {
+        width: 420px;
+        margin-top: 40px;
+    }
+
+    /* 상단 사무소 정보 박스 */
+    .office-box {
+        width: 100%;
+        background: #ffffffcc;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        text-align: center;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* 접수 박스 */
     .container {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .agency-info {
-      backdrop-filter: blur(12px);
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 18px;
-      border-radius: 14px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-      margin-bottom: 20px;
-      text-align: center;
-      line-height: 1.6;
-      font-size: 15px;
-    }
-
-    form {
-      backdrop-filter: blur(15px);
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-      width: 100%;
-      color: #fff;
+        width: 100%;
+        background: #ffffffcc;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
     }
 
     h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: 600;
-      font-size: 1.6em;
+        text-align: center;
+        margin-bottom: 18px;
+        color: #333;
     }
 
     label {
-      font-weight: 500;
-      display: block;
-      margin-bottom: 6px;
-      margin-top: 10px;
+        font-weight: bold;
+        margin-top: 12px;
+        display: block;
     }
 
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      margin-bottom: 12px;
-      font-size: 15px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #222;
+    select, input, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 6px;
+        border: 1px solid #bbb;
+        border-radius: 6px;
     }
 
     textarea {
-      resize: none;
+        height: 80px;
     }
 
     button {
-      width: 100%;
-      background: linear-gradient(135deg, #2b6cb0, #1a4e85);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-      transition: 0.3s;
+        width: 100%;
+        padding: 12px;
+        background: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        margin-top: 18px;
+        cursor: pointer;
+        font-size: 15px;
     }
 
     button:hover {
-      background: linear-gradient(135deg, #377ed6, #20599a);
-      transform: translateY(-2px);
+        background: #125ea8;
     }
-
-    option[value=""] {
-      color: gray;
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
-  <div class="container">
+<div class="wrapper">
 
-    <!-- 📌 사무소 정보 영역 -->
-    <div class="agency-info">
-      <strong style="font-size:17px;">포레자이우리공인중개사사무소</strong><br>
-      대표: 백성욱<br>
-      Tel : 031-701-0014<br>
-      H.P : 010-8521-4343
+    <!-- 사무소 정보 박스 -->
+    <div class="office-box">
+        <strong>포레자이우리공인중개사사무소</strong><br>
+        대표: 백성욱<br>
+        Tel : 031-701-0014<br>
+        H.P : 010-8521-4343
     </div>
 
-    <form id="listingForm">
-      <h2>🏠 매물 접수하기</h2>
+    <!-- 매물 접수 박스 -->
+    <div class="container">
+        <h2>매물 접수</h2>
 
-      <label for="dealType">매물 구분</label>
-      <select id="dealType" required>
-        <option value="">선택하세요</option>
-        <option value="매매">매매</option>
-        <option value="임대">임대</option>
-      </select>
+        <!-- 매물 구분 -->
+        <label>매물 구분</label>
+        <select id="tradeType">
+            <option value="매매">매매</option>
+            <option value="임대">임대</option>
+        </select>
 
-      <label for="submitter">접수자</label>
-      <select id="submitter" required>
-        <option value="">매물 구분을 먼저 선택하세요</option>
-      </select>
+        <!-- 접수자 -->
+        <label>접수자</label>
+        <select id="ownerType">
+            <option value="소유자">소유자</option>
+            <option value="임대인">임대인</option>
+            <option value="임차인">임차인</option>
+        </select>
 
-      <label for="propertyType">매물 종류</label>
-      <select id="propertyType" required>
-        <option value="">선택하세요</option>
-        <option value="아파트">아파트</option>
-        <option value="오피스텔">오피스텔</option>
-        <option value="다가구주택">다가구주택</option>
-        <option value="상가">상가</option>
-        <option value="사무실">사무실</option>
-        <option value="기타">기타</option>
-      </select>
+        <!-- 매물 종류 -->
+        <label>매물 종류</label>
+        <select id="propertyType">
+            <option value="아파트">아파트</option>
+            <option value="오피스텔">오피스텔</option>
+            <option value="다가구주택">다가구주택</option>
+            <option value="상가">상가</option>
+            <option value="사무실">사무실</option>
+            <option value="기타">기타</option>
+        </select>
 
-      <label for="name">성함</label>
-      <input type="text" id="name" placeholder="예: 홍길동" required>
+        <label>주소</label>
+        <input type="text" id="address">
 
-      <label for="phone">연락처</label>
-      <input type="text" id="phone" placeholder="예: 010-1234-5678" required>
+        <label>면적</label>
+        <input type="text" id="size">
 
-      <label for="address">매물 주소</label>
-      <input type="text" id="address" placeholder="예: 성남시 수정구 고등로 33" required>
+        <label>희망가</label>
+        <input type="text" id="price">
 
-      <label for="details">추가 설명</label>
-      <textarea id="details" placeholder="옵션, 입주 가능일 등 추가 정보" rows="4"></textarea>
+        <label>기타 내용</label>
+        <textarea id="details"></textarea>
 
-      <button type="submit">매물 접수</button>
-    </form>
+        <button onclick="sendToTelegram()">접수하기</button>
+    </div>
+</div>
 
-  </div>
+<script>
+function sendToTelegram() {
+    const botToken = "여기에_텔레그램_봇토큰";
+    const chatId = "여기에_챗ID";
 
-  <script>
-    const BOT_TOKEN = "👉여기에_봇토큰입력👈";
-    const CHAT_ID = "👉여기에_CHAT_ID입력👈";
+    const trade = document.getElementById("tradeType").value;
+    const owner = document.getElementById("ownerType").value;
+    const pType = document.getElementById("propertyType").value;
+    const addr = document.getElementById("address").value;
+    const size = document.getElementById("size").value;
+    const price = document.getElementById("price").value;
+    const details = document.getElementById("details").value;
 
-    const dealTypeSelect = document.getElementById("dealType");
-    const submitterSelect = document.getElementById("submitter");
-
-    dealTypeSelect.addEventListener("change", () => {
-      const type = dealTypeSelect.value;
-      submitterSelect.innerHTML = '<option value="">선택하세요</option>';
-      if (type === "매매") {
-        submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
-      } else if (type === "임대") {
-        submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
-        submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
-      } else {
-        submitterSelect.innerHTML = '<option value="">매물 구분을 먼저 선택하세요</option>';
-      }
-    });
-
-    document.getElementById("listingForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const dealType = document.getElementById("dealType").value;
-      const submitter = document.getElementById("submitter").value;
-      const propertyType = document.getElementById("propertyType").value;
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const address = document.getElementById("address").value;
-      const details = document.getElementById("details").value;
-
-      const message = 
-`📬 *[매물 접수]*
-
-🏷️ 매물 구분: ${dealType}
-👤 접수자: ${submitter}
-🏠 매물 종류: ${propertyType}
-
-📍 주소: ${address}
-👔 이름: ${name}
-📞 연락처: ${phone}
-
-📝 내용:
+    const text =
+`📩 *새 매물 접수*
+━━━━━━━━━━━━
+🏷 *매물 구분:* ${trade}
+🙍 *접수자:* ${owner}
+🏢 *매물 종류:* ${pType}
+📍 *주소:* ${addr}
+📐 *면적:* ${size}
+💰 *희망가:* ${price}
+📝 *기타 내용:* 
 ${details}`;
 
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-      })
-      .then(() => {
-        alert("✅ 매물 접수가 완료되었습니다!");
-        document.getElementById("listingForm").reset();
-        submitterSelect.innerHTML = '<option value="">매물 구분을 먼저 선택하세요</option>';
-      })
-      .catch(err => {
-        alert("❌ 전송 중 오류가 발생했습니다.");
-        console.error(err);
-      });
-    });
-  </script>
+        body: JSON.stringify({
+            chat_id: chatId,
+            text: text,
+            parse_mode: "Markdown"
+        })
+    })
+    .then(res => alert("접수 완료!"))
+    .catch(err => alert("전송 오류 발생"));
+}
+</script>
+
 </body>
 </html>
