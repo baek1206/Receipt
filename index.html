@@ -6,17 +6,37 @@
   <title>매물 접수 폼</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
+
     body {
       font-family: 'Pretendard', sans-serif;
       background: linear-gradient(to bottom right, rgba(0, 60, 120, 0.5), rgba(0, 0, 0, 0.7)),
-                  url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+                  url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1950&q=80') 
+                  no-repeat center center/cover;
       background-attachment: fixed;
       color: #fff;
       min-height: 100vh;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .agency-info {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 18px;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+      margin-bottom: 20px;
+      text-align: center;
+      line-height: 1.6;
+      font-size: 15px;
     }
 
     form {
@@ -27,7 +47,6 @@
       border-radius: 16px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.3);
       width: 100%;
-      max-width: 480px;
       color: #fff;
     }
 
@@ -85,50 +104,63 @@
   </style>
 </head>
 <body>
-  <form id="listingForm">
-    <h2>🏠 매물 접수하기</h2>
 
-    <label for="dealType">매물 구분</label>
-    <select id="dealType" required>
-      <option value="">선택하세요</option>
-      <option value="매매">매매</option>
-      <option value="임대">임대</option>
-    </select>
+  <div class="container">
 
-    <label for="submitter">접수자</label>
-    <select id="submitter" required>
-      <option value="">매물 구분을 먼저 선택하세요</option>
-    </select>
+    <!-- 📌 사무소 정보 영역 -->
+    <div class="agency-info">
+      <strong style="font-size:17px;">포레자이우리공인중개사사무소</strong><br>
+      대표: 백성욱<br>
+      Tel : 031-701-0014<br>
+      H.P : 010-8521-4343
+    </div>
 
-    <label for="propertyType">매물 종류</label>
-    <select id="propertyType" required>
-      <option value="">선택하세요</option>
-      <option value="아파트">아파트</option>
-      <option value="오피스텔">오피스텔</option>
-      <option value="다가구주택">다가구주택</option>
-      <option value="상가">상가</option>
-      <option value="사무실">사무실</option>
-      <option value="기타">기타</option>
-    </select>
+    <form id="listingForm">
+      <h2>🏠 매물 접수하기</h2>
 
-    <label for="name">성함</label>
-    <input type="text" id="name" placeholder="예: 홍길동, 업체:상호명" required>
+      <label for="dealType">매물 구분</label>
+      <select id="dealType" required>
+        <option value="">선택하세요</option>
+        <option value="매매">매매</option>
+        <option value="임대">임대</option>
+      </select>
 
-    <label for="phone">연락처</label>
-    <input type="text" id="phone" placeholder="예: 010-1234-5678" required>
+      <label for="submitter">접수자</label>
+      <select id="submitter" required>
+        <option value="">매물 구분을 먼저 선택하세요</option>
+      </select>
 
-    <label for="address">매물 주소</label>
-    <input type="text" id="address" placeholder="예: 성남시 수정구 고등로 33 판교밸리포레자이아파트 OOO동 OOO호" required>
+      <label for="propertyType">매물 종류</label>
+      <select id="propertyType" required>
+        <option value="">선택하세요</option>
+        <option value="아파트">아파트</option>
+        <option value="오피스텔">오피스텔</option>
+        <option value="다가구주택">다가구주택</option>
+        <option value="상가">상가</option>
+        <option value="사무실">사무실</option>
+        <option value="기타">기타</option>
+      </select>
 
-    <label for="details">추가 설명</label>
-    <textarea id="details" placeholder="옵션, 입주 가능일 등 추가 정보" rows="4"></textarea>
+      <label for="name">성함</label>
+      <input type="text" id="name" placeholder="예: 홍길동" required>
 
-    <button type="submit">매물 접수</button>
-  </form>
+      <label for="phone">연락처</label>
+      <input type="text" id="phone" placeholder="예: 010-1234-5678" required>
+
+      <label for="address">매물 주소</label>
+      <input type="text" id="address" placeholder="예: 성남시 수정구 고등로 33" required>
+
+      <label for="details">추가 설명</label>
+      <textarea id="details" placeholder="옵션, 입주 가능일 등 추가 정보" rows="4"></textarea>
+
+      <button type="submit">매물 접수</button>
+    </form>
+
+  </div>
 
   <script>
-    const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
-    const CHAT_ID = "5878163526";
+    const BOT_TOKEN = "👉여기에_봇토큰입력👈";
+    const CHAT_ID = "👉여기에_CHAT_ID입력👈";
 
     const dealTypeSelect = document.getElementById("dealType");
     const submitterSelect = document.getElementById("submitter");
@@ -157,14 +189,25 @@
       const address = document.getElementById("address").value;
       const details = document.getElementById("details").value;
 
-      const message = `📬 [매물 접수]\n\n🏷️ 매물 구분: ${dealType}\n👤 접수자: ${submitter}\n🏠 매물 종류: ${propertyType}\n📍 주소: ${address}\n👔 이름: ${name}\n📞 연락처: ${phone}\n📝 내용: ${details}`;
+      const message = 
+`📬 *[매물 접수]*
+
+🏷️ 매물 구분: ${dealType}
+👤 접수자: ${submitter}
+🏠 매물 종류: ${propertyType}
+
+📍 주소: ${address}
+👔 이름: ${name}
+📞 연락처: ${phone}
+
+📝 내용:
+${details}`;
 
       fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ chat_id: CHAT_ID, text: message })
       })
-      .then(res => res.json())
       .then(() => {
         alert("✅ 매물 접수가 완료되었습니다!");
         document.getElementById("listingForm").reset();
