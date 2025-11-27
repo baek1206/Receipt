@@ -65,8 +65,10 @@
       margin-top: 10px;
     }
 
+    /* 📌 모든 입력창과 선택창 폭, 높이, 패딩 통일 */
     input, textarea, select {
       width: 100%;
+      box-sizing: border-box; /* padding + border 포함한 실제 폭 */
       padding: 12px;
       border-radius: 10px;
       border: none;
@@ -79,6 +81,7 @@
 
     textarea {
       resize: none;
+      height: 90px; /* input 높이와 비슷하게 */
     }
 
     button {
@@ -212,14 +215,3 @@ ${details}`;
       })
       .then(() => {
         alert("✅ 매물 접수가 완료되었습니다!");
-        document.getElementById("listingForm").reset();
-        submitterSelect.innerHTML = '<option value="">매물 구분을 먼저 선택하세요</option>';
-      })
-      .catch(err => {
-        alert("❌ 전송 중 오류가 발생했습니다.");
-        console.error(err);
-      });
-    });
-  </script>
-</body>
-</html>
