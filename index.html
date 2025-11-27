@@ -165,7 +165,9 @@
 
     const dealTypeSelect = document.getElementById("dealType");
     const submitterSelect = document.getElementById("submitter");
+    const propertyTypeSelect = document.getElementById("propertyType");
 
+    // 매물 구분 선택 시 접수자 옵션 변경
     dealTypeSelect.addEventListener("change", () => {
       const type = dealTypeSelect.value;
       submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
@@ -177,18 +179,19 @@
       }
     });
 
-    document.getElementById("listingForm").addEventListener("submit", function(e) {
+    // 폼 제출 이벤트
+    document.getElementById("listingForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
       // 필수 체크
-      if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
+      if (!dealTypeSelect.value || !submitterSelect.value || !propertyTypeSelect.value) {
         alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
         return;
       }
 
       const dealType = dealTypeSelect.value;
       const submitter = submitterSelect.value;
-      const propertyType = document.getElementById("propertyType").value;
+      const propertyType = propertyTypeSelect.value;
       const name = document.getElementById("name").value;
       const phone = document.getElementById("phone").value;
       const address = document.getElementById("address").value;
@@ -208,20 +211,26 @@
 📝 내용:
 ${details}`;
 
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-      })
-      .then(() => {
-        alert("✅ 매물 접수가 완료되었습니다!");
-        document.getElementById("listingForm").reset();
-        submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
-      })
-      .catch(err => {
-        alert("❌ 전송 중 오류가 발생했습니다.");
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
+        });
+
+        const data = await response.json();
+        if (data.ok) {
+          alert("✅ 매물 접수가 완료되었습니다!");
+          document.getElementById("listingForm").reset();
+          submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
+        } else {
+          console.error(data);
+          alert("❌ 전송 중 오류가 발생했습니다. 토큰과 채팅ID를 확인하세요.");
+        }
+      } catch (err) {
         console.error(err);
-      });
+        alert("❌ 전송 중 네트워크 오류가 발생했습니다.");
+      }
     });
   </script>
 </body>
