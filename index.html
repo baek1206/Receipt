@@ -13,132 +13,109 @@
         justify-content: center;
     }
 
-    /* 전체 컨테이너 */
-    .wrapper {
-        width: 420px;
-        margin-top: 40px;
-    }
-
-    /* 상단 사무소 정보 박스 */
-    .office-box {
-        width: 100%;
-        background: #ffffffcc;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
-        text-align: center;
-        font-size: 15px;
-        line-height: 1.6;
-    }
-
-    /* 접수 박스 */
+    /* 전체 레이아웃을 모바일에 맞게 조절 */
     .container {
-        width: 100%;
+        width: 92%;
+        max-width: 420px; /* 큰 폰에서도 예쁘게 */
         background: #ffffffcc;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+        padding: 18px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border-radius: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
     }
 
     h2 {
         text-align: center;
         margin-bottom: 18px;
         color: #333;
+        font-size: 20px;
     }
 
     label {
         font-weight: bold;
         margin-top: 12px;
         display: block;
+        font-size: 14px;
     }
 
     select, input, textarea {
         width: 100%;
-        padding: 10px;
+        padding: 11px;
         margin-top: 6px;
         border: 1px solid #bbb;
-        border-radius: 6px;
+        border-radius: 8px;
+        font-size: 15px;
     }
 
     textarea {
-        height: 80px;
+        height: 90px;
     }
 
     button {
         width: 100%;
-        padding: 12px;
+        padding: 13px;
         background: #1976d2;
         color: white;
         border: none;
-        border-radius: 6px;
-        margin-top: 18px;
+        border-radius: 8px;
+        margin-top: 20px;
         cursor: pointer;
-        font-size: 15px;
+        font-size: 16px;
     }
 
     button:hover {
         background: #125ea8;
     }
+
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div class="container">
 
-    <!-- 사무소 정보 박스 -->
-    <div class="office-box">
-        <strong>포레자이우리공인중개사사무소</strong><br>
-        대표: 백성욱<br>
-        Tel : 031-701-0014<br>
-        H.P : 010-8521-4343
-    </div>
+    <h2>매물 접수</h2>
 
-    <!-- 매물 접수 박스 -->
-    <div class="container">
-        <h2>매물 접수</h2>
+    <!-- 매물 구분 -->
+    <label>매물 구분</label>
+    <select id="tradeType">
+        <option value="매매">매매</option>
+        <option value="임대">임대</option>
+    </select>
 
-        <!-- 매물 구분 -->
-        <label>매물 구분</label>
-        <select id="tradeType">
-            <option value="매매">매매</option>
-            <option value="임대">임대</option>
-        </select>
+    <!-- 접수자 -->
+    <label>접수자</label>
+    <select id="ownerType">
+        <option value="소유자">소유자</option>
+        <option value="임대인">임대인</option>
+        <option value="임차인">임차인</option>
+    </select>
 
-        <!-- 접수자 -->
-        <label>접수자</label>
-        <select id="ownerType">
-            <option value="소유자">소유자</option>
-            <option value="임대인">임대인</option>
-            <option value="임차인">임차인</option>
-        </select>
+    <!-- 매물 종류 -->
+    <label>매물 종류</label>
+    <select id="propertyType">
+        <option value="아파트">아파트</option>
+        <option value="오피스텔">오피스텔</option>
+        <option value="다가구주택">다가구주택</option>
+        <option value="상가">상가</option>
+        <option value="사무실">사무실</option>
+        <option value="기타">기타</option>
+    </select>
 
-        <!-- 매물 종류 -->
-        <label>매물 종류</label>
-        <select id="propertyType">
-            <option value="아파트">아파트</option>
-            <option value="오피스텔">오피스텔</option>
-            <option value="다가구주택">다가구주택</option>
-            <option value="상가">상가</option>
-            <option value="사무실">사무실</option>
-            <option value="기타">기타</option>
-        </select>
+    <label>주소</label>
+    <input type="text" id="address">
 
-        <label>주소</label>
-        <input type="text" id="address">
+    <label>면적</label>
+    <input type="text" id="size">
 
-        <label>면적</label>
-        <input type="text" id="size">
+    <label>희망가</label>
+    <input type="text" id="price">
 
-        <label>희망가</label>
-        <input type="text" id="price">
+    <label>기타 내용</label>
+    <textarea id="details"></textarea>
 
-        <label>기타 내용</label>
-        <textarea id="details"></textarea>
-
-        <button onclick="sendToTelegram()">접수하기</button>
-    </div>
+    <button onclick="sendToTelegram()">접수하기</button>
 </div>
 
 <script>
