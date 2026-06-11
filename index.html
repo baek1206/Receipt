@@ -1,215 +1,226 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>매물 접수 폼</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
+<meta charset="UTF-8">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EDGK1D2H16"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-EDGK1D2H16');
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매물 접수 폼</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap');
 
-    body {
-      font-family: 'Pretendard', sans-serif;
-      background: linear-gradient(to bottom right, rgba(0, 60, 120, 0.5), rgba(0, 0, 0, 0.7)),
-                  url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1950&q=80') 
-                  no-repeat center center/cover;
-      background-attachment: fixed;
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 20px;
-    }
+body {
+font-family: 'Pretendard', sans-serif;
+background: linear-gradient(to bottom right, rgba(0, 60, 120, 0.5), rgba(0, 0, 0, 0.7)),
+url('https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1950&q=80') 
+no-repeat center center/cover;
+background-attachment: fixed;
+color: #fff;
+min-height: 100vh;
+display: flex;
+align-items: flex-start;
+justify-content: center;
+padding: 20px;
+}
 
-    .container {
-      width: 100%;
-      max-width: 500px;
-    }
+.container {
+width: 100%;
+max-width: 500px;
+}
 
-    .agency-info,
-    form {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 22px;
-      border-radius: 16px;
-      backdrop-filter: blur(15px);
-      background: rgba(255, 255, 255, 0.18);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    }
+.agency-info,
+form {
+width: 100%;
+box-sizing: border-box;
+padding: 22px;
+border-radius: 16px;
+backdrop-filter: blur(15px);
+background: rgba(255, 255, 255, 0.18);
+border: 1px solid rgba(255, 255, 255, 0.25);
+box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
 
-    .agency-info {
-      text-align: center;
-      line-height: 1.6;
-      font-size: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .agency-info .highlight {
-      color: #FFD700; /* 노란색 */
-      font-weight: 700;
-      font-size: 20px; /* 강조 글씨 크기 */
-    }
+.agency-info {
+text-align: center;
+line-height: 1.6;
+font-size: 15px;
+margin-bottom: 20px;
+}
 
-    /* 전화번호 스타일 */
-    .agency-info a {
-      color: #fff;           /* 흰색으로 유지 */
-      text-decoration: none; /* 밑줄 제거 */
-    }
+.agency-info .highlight {
+color: #FFD700; /* 노란색 */
+font-weight: 700;
+font-size: 20px; /* 강조 글씨 크기 */
+}
 
-    form {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+/* 전화번호 스타일 */
+.agency-info a {
+color: #fff;           /* 흰색으로 유지 */
+text-decoration: none; /* 밑줄 제거 */
+}
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: 600;
-      font-size: 1.6em;
-    }
+form {
+background: rgba(255, 255, 255, 0.15);
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
 
-    label {
-      font-weight: 500;
-      display: block;
-      margin-bottom: 6px;
-      margin-top: 10px;
-    }
+h2 {
+text-align: center;
+margin-bottom: 20px;
+font-weight: 600;
+font-size: 1.6em;
+}
 
-    input, textarea, select {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
-      margin-bottom: 12px;
-      font-size: 15px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #222;
-    }
+label {
+font-weight: 500;
+display: block;
+margin-bottom: 6px;
+margin-top: 10px;
+}
 
-    textarea {
-      resize: none;
-      height: 90px;
-    }
+input, textarea, select {
+width: 100%;
+box-sizing: border-box;
+padding: 12px;
+border-radius: 10px;
+border: none;
+outline: none;
+margin-bottom: 12px;
+font-size: 15px;
+background: rgba(255, 255, 255, 0.9);
+color: #222;
+}
 
-    button {
-      width: 100%;
-      background: linear-gradient(135deg, #2b6cb0, #1a4e85);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-      transition: 0.3s;
-    }
+textarea {
+resize: none;
+height: 90px;
+}
 
-    button:hover {
-      background: linear-gradient(135deg, #377ed6, #20599a);
-      transform: translateY(-2px);
-    }
+button {
+width: 100%;
+background: linear-gradient(135deg, #2b6cb0, #1a4e85);
+color: white;
+padding: 14px;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+font-size: 16px;
+font-weight: 600;
+transition: 0.3s;
+}
 
-    option[value=""] {
-      color: gray;
-    }
-  </style>
+button:hover {
+background: linear-gradient(135deg, #377ed6, #20599a);
+transform: translateY(-2px);
+}
+
+option[value=""] {
+color: gray;
+}
+</style>
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="agency-info">
-      <strong style="font-size:17px;">
+<div class="agency-info">
+<strong style="font-size:17px;">
+        <span class="highlight">포레자이<strong style="font-size:18px;">우리</strong></span>공인중개사사무소
         <span class="highlight">포레자이우리</span>공인중개사사무소
-      </strong><br>
-      대표: 백성욱<br>
-      Tel : <a href="tel:0317542348">031-754-2348</a><br>
-      H.P : <a href="tel:01085214343">010-8521-4343</a><br>
-      <span class="highlight">Blog : </span>  <a href="https://blog.naver.com/forexiirealestate">블로그 바로가기 <span class="highlight">Click</span></a>
-    </div>
+</strong><br>
+대표: 백성욱<br>
+Tel : <a href="tel:0317542348">031-754-2348</a><br>
+H.P : <a href="tel:01085214343">010-8521-4343</a><br>
+<span class="highlight">Blog : </span>  <a href="https://blog.naver.com/forexiirealestate">블로그 바로가기 <span class="highlight">Click</span></a><br><br>
+<span style="font-size:13px; opacity:0.85;">👀 방문자 수</span><br>
+<img src="https://hits.sh/baek1206.github.io/index.html.svg?style=for-the-badge&label=%EB%B0%A9%EB%AC%B8%EC%9E%90&color=2b6cb0&labelColor=1a3a5c" alt="방문자 수" style="margin-top:6px;">
+</div>
 
-    <form id="listingForm">
-      <h2>🏠 매물 접수하기</h2>
+<form id="listingForm">
+<h2>🏠 매물 접수하기</h2>
 
-      <label for="dealType">매물 구분</label>
-      <select id="dealType" required>
-        <option value="" disabled selected>선택하세요</option>
-        <option value="매매">매매</option>
-        <option value="임대">임대</option>
-      </select>
+<label for="dealType">매물 구분</label>
+<select id="dealType" required>
+<option value="" disabled selected>선택하세요</option>
+<option value="매매">매매</option>
+<option value="임대">임대</option>
+</select>
 
-      <label for="submitter">접수자</label>
-      <select id="submitter" required>
-        <option value="" disabled selected>매물 구분을 먼저 선택하세요</option>
-      </select>
+<label for="submitter">접수자</label>
+<select id="submitter" required>
+<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>
+</select>
 
-      <label for="propertyType">매물 종류</label>
-      <select id="propertyType" required>
-        <option value="" disabled selected>선택하세요</option>
-        <option value="아파트">아파트</option>
-        <option value="오피스텔">오피스텔</option>
-        <option value="다가구주택">다가구주택</option>
-        <option value="상가">상가</option>
-        <option value="사무실">사무실</option>
-        <option value="기타">기타</option>
-      </select>
+<label for="propertyType">매물 종류</label>
+<select id="propertyType" required>
+<option value="" disabled selected>선택하세요</option>
+<option value="아파트">아파트</option>
+<option value="오피스텔">오피스텔</option>
+<option value="다가구주택">다가구주택</option>
+<option value="상가">상가</option>
+<option value="사무실">사무실</option>
+<option value="기타">기타</option>
+</select>
 
-      <label for="name">성함</label>
-      <input type="text" id="name" placeholder="예: 홍길동" required>
+<label for="name">성함</label>
+<input type="text" id="name" placeholder="예: 홍길동" required>
 
-      <label for="phone">연락처</label>
-      <input type="text" id="phone" placeholder="예: 010-1234-5678" required>
+<label for="phone">연락처</label>
+<input type="text" id="phone" placeholder="예: 010-1234-5678" required>
 
-      <label for="address">매물 주소</label>
-      <input type="text" id="address" placeholder="예: 지번, 건물명, 동/호수" required>
+<label for="address">매물 주소</label>
+<input type="text" id="address" placeholder="예: 지번, 건물명, 동/호수" required>
 
-      <label for="details">추가 설명</label>
-      <textarea id="details" placeholder="옵션, 입주 가능일 등 추가 정보" rows="4"></textarea>
+<label for="details">추가 설명</label>
+<textarea id="details" placeholder="옵션, 입주 가능일 등 추가 정보" rows="4"></textarea>
 
-      <button type="submit">매물 접수</button>
-    </form>
+<button type="submit">매물 접수</button>
+</form>
 
-  </div>
+</div>
 
-  <script>
-    const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
-    const CHAT_ID = "5878163526";
+<script>
+const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
+const CHAT_ID = "5878163526";
 
-    const dealTypeSelect = document.getElementById("dealType");
-    const submitterSelect = document.getElementById("submitter");
+const dealTypeSelect = document.getElementById("dealType");
+const submitterSelect = document.getElementById("submitter");
 
-    dealTypeSelect.addEventListener("change", () => {
-      const type = dealTypeSelect.value;
-      submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
-      if (type === "매매") {
-        submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
-      } else if (type === "임대") {
-        submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
-        submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
-      }
-    });
+dealTypeSelect.addEventListener("change", () => {
+const type = dealTypeSelect.value;
+submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
+if (type === "매매") {
+submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
+} else if (type === "임대") {
+submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
+submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
+}
+});
 
-    document.getElementById("listingForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+document.getElementById("listingForm").addEventListener("submit", function(e) {
+e.preventDefault();
 
-      // 필수 체크
-      if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
-        alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
-        return;
-      }
+// 필수 체크
+if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
+alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
+return;
+}
 
-      const dealType = dealTypeSelect.value;
-      const submitter = submitterSelect.value;
-      const propertyType = document.getElementById("propertyType").value;
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const address = document.getElementById("address").value;
-      const details = document.getElementById("details").value;
+const dealType = dealTypeSelect.value;
+const submitter = submitterSelect.value;
+const propertyType = document.getElementById("propertyType").value;
+const name = document.getElementById("name").value;
+const phone = document.getElementById("phone").value;
+const address = document.getElementById("address").value;
+const details = document.getElementById("details").value;
 
-      const message = 
+const message = 
 `📬 *[매물 접수]*
 
 🏷️ 매물 구분: ${dealType}
@@ -223,21 +234,21 @@
 📝 내용:
 ${details}`;
 
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-      })
-      .then(() => {
-        alert("✅ 매물 접수가 완료되었습니다!");
-        document.getElementById("listingForm").reset();
-        submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
-      })
-      .catch(err => {
-        alert("❌ 전송 중 오류가 발생했습니다.");
-        console.error(err);
-      });
-    });
-  </script>
+fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+})
+.then(() => {
+alert("✅ 매물 접수가 완료되었습니다!");
+document.getElementById("listingForm").reset();
+submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
+})
+.catch(err => {
+alert("❌ 전송 중 오류가 발생했습니다.");
+console.error(err);
+});
+});
+</script>
 </body>
 </html>
