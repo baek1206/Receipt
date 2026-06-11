@@ -187,24 +187,22 @@ H.P : <a href="tel:01085214343">010-8521-4343</a><br>
 const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
 const CHAT_ID = "5878163526";
 
-// ✅ 방문자 카운팅 — 하루 1회만 카운트, 5명마다 텔레그램 알림
+// ✅ 방문자 카운팅 — 탭 열 때 1회만 카운트 (새로고침 중복 방지), 5명마다 텔레그램 알림
 (function() {
-  const today = new Date().toISOString().slice(0, 10); // "2025-06-11"
-  const lastVisit = localStorage.getItem("lastVisit");
+  // sessionStorage: 탭을 닫기 전까지 유지 → 새로고침해도 중복 카운트 안 됨
+  if (sessionStorage.getItem("visited")) return;
+  sessionStorage.setItem("visited", "1");
 
-  if (lastVisit === today) return; // 오늘 이미 방문함 → 카운트 안 함
-
-  localStorage.setItem("lastVisit", today);
   let total = parseInt(localStorage.getItem("totalVisitors") || "0") + 1;
   localStorage.setItem("totalVisitors", total);
 
   if (total % 5 === 0) {
-    const msg = `👀 *[방문자 알림]*\n\n포레자이우리 매물 접수 페이지\n누적 방문자 *${total}명* 달성! 🎉`;
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    const msg = "👀 [방문자 알림]\n\n포레자이우리 매물 접수 페이지\n누적 방문자 " + total + "명 달성! 🎉";
+    fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: "Markdown" })
-    });
+      body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+    }).then(r => r.json()).then(d => console.log("텔레그램:", d));
   }
 })();
 
