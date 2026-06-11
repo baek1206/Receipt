@@ -54,15 +54,14 @@ margin-bottom: 20px;
 }
 
 .agency-info .highlight {
-color: #FFD700; /* 노란색 */
+color: #FFD700;
 font-weight: 700;
-font-size: 20px; /* 강조 글씨 크기 */
+font-size: 20px;
 }
 
-/* 전화번호 스타일 */
 .agency-info a {
-color: #fff;           /* 흰색으로 유지 */
-text-decoration: none; /* 밑줄 제거 */
+color: #fff;
+text-decoration: none;
 }
 
 form {
@@ -131,7 +130,7 @@ color: gray;
 
 <div class="agency-info">
 <strong style="font-size:17px;">
-        <span class="highlight">포레자이우리</span>공인중개사사무소
+  <span class="highlight">포레자이우리</span>공인중개사사무소
 </strong><br>
 대표: 백성욱<br>
 Tel : <a href="tel:0317542348">031-754-2348</a><br>
@@ -188,38 +187,58 @@ H.P : <a href="tel:01085214343">010-8521-4343</a><br>
 const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
 const CHAT_ID = "5878163526";
 
+// ✅ 방문자 카운팅 — 하루 1회만 카운트, 5명마다 텔레그램 알림
+(function() {
+  const today = new Date().toISOString().slice(0, 10); // "2025-06-11"
+  const lastVisit = localStorage.getItem("lastVisit");
+
+  if (lastVisit === today) return; // 오늘 이미 방문함 → 카운트 안 함
+
+  localStorage.setItem("lastVisit", today);
+  let total = parseInt(localStorage.getItem("totalVisitors") || "0") + 1;
+  localStorage.setItem("totalVisitors", total);
+
+  if (total % 5 === 0) {
+    const msg = `👀 *[방문자 알림]*\n\n포레자이우리 매물 접수 페이지\n누적 방문자 *${total}명* 달성! 🎉`;
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text: msg, parse_mode: "Markdown" })
+    });
+  }
+})();
+
 const dealTypeSelect = document.getElementById("dealType");
 const submitterSelect = document.getElementById("submitter");
 
 dealTypeSelect.addEventListener("change", () => {
-const type = dealTypeSelect.value;
-submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
-if (type === "매매") {
-submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
-} else if (type === "임대") {
-submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
-submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
-}
+  const type = dealTypeSelect.value;
+  submitterSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>';
+  if (type === "매매") {
+    submitterSelect.innerHTML += '<option value="소유자">소유자</option>';
+  } else if (type === "임대") {
+    submitterSelect.innerHTML += '<option value="임대인">임대인</option>';
+    submitterSelect.innerHTML += '<option value="임차인">임차인</option>';
+  }
 });
 
 document.getElementById("listingForm").addEventListener("submit", function(e) {
-e.preventDefault();
+  e.preventDefault();
 
-// 필수 체크
-if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
-alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
-return;
-}
+  if (!dealTypeSelect.value || !submitterSelect.value || !document.getElementById("propertyType").value) {
+    alert("❌ 매물 구분, 접수자, 매물 종류를 반드시 선택해주세요!");
+    return;
+  }
 
-const dealType = dealTypeSelect.value;
-const submitter = submitterSelect.value;
-const propertyType = document.getElementById("propertyType").value;
-const name = document.getElementById("name").value;
-const phone = document.getElementById("phone").value;
-const address = document.getElementById("address").value;
-const details = document.getElementById("details").value;
+  const dealType = dealTypeSelect.value;
+  const submitter = submitterSelect.value;
+  const propertyType = document.getElementById("propertyType").value;
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
+  const details = document.getElementById("details").value;
 
-const message = 
+  const message = 
 `📬 *[매물 접수]*
 
 🏷️ 매물 구분: ${dealType}
@@ -233,20 +252,20 @@ const message =
 📝 내용:
 ${details}`;
 
-fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-})
-.then(() => {
-alert("✅ 매물 접수가 완료되었습니다!");
-document.getElementById("listingForm").reset();
-submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
-})
-.catch(err => {
-alert("❌ 전송 중 오류가 발생했습니다.");
-console.error(err);
-});
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: "Markdown" })
+  })
+  .then(() => {
+    alert("✅ 매물 접수가 완료되었습니다!");
+    document.getElementById("listingForm").reset();
+    submitterSelect.innerHTML = '<option value="" disabled selected>매물 구분을 먼저 선택하세요</option>';
+  })
+  .catch(err => {
+    alert("❌ 전송 중 오류가 발생했습니다.");
+    console.error(err);
+  });
 });
 </script>
 </body>
