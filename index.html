@@ -187,59 +187,34 @@ H.P : <a href="tel:01085214343">010-8521-4343</a><br>
 const BOT_TOKEN = "6195885740:AAElDMAIGeIBJYd7l6mFtAFcSIYyHo9WCOc";
 const CHAT_ID = "5878163526";
 
-// ✅ 방문자 카운팅 — 텔레그램 서버에 카운트 저장, 5명마다 알림
+// ✅ 방문자 카운팅 — hits.sh에서 숫자 읽어서 5배수마다 텔레그램 알림
 (function() {
-  // 이 세션에서 이미 카운트했으면 스킵
   if (sessionStorage.getItem("counted")) return;
   sessionStorage.setItem("counted", "1");
 
-  // 텔레그램 봇에서 현재 카운트 가져오기 (메시지 핀 활용 대신 getUpdates 우회)
-  // → 간단하게: 매 방문마다 카운트 메시지 전송, 봇이 누적 관리
-  const countKey = "vc_baek1206";
+  // hits.sh JSON API로 현재 누적 방문자 수 가져오기
+  fetch("https://hits.sh/baek1206.github.io/Receipt.json")
+    .then(r => r.json())
+    .then(data => {
+      const total = data.total; // 누적 전체 방문자 수
+      console.log("현재 방문자 수:", total);
 
-  // 현재 카운트를 localStorage에서 가져오되, 쿠키로 이중 검증
-  function getCookie(name) {
-    const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-    return m ? decodeURIComponent(m[2]) : null;
-  }
-  function setCookie(name, value) {
-    const exp = new Date();
-    exp.setFullYear(exp.getFullYear() + 1);
-    document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + exp.toUTCString() + ";path=/Receipt;SameSite=Lax";
-  }
-
-  const today = new Date().toISOString().slice(0, 10);
-  const visitedDate = getCookie("vdate");
-
-  // 오늘 이미 방문했으면 카운트 안 함
-  if (visitedDate === today) return;
-  setCookie("vdate", today);
-
-  // 카운트 증가
-  let total = parseInt(getCookie("vtotal") || "0") + 1;
-  setCookie("vtotal", String(total));
-
-  // 매 방문마다 텔레그램에 카운트 전송 (5명마다 특별 알림)
-  let msg;
-  if (total % 5 === 0) {
-    msg = "👀 [방문자 알림]
+      if (total % 5 === 0) {
+        const msg = "👀 [방문자 알림]
 
 포레자이우리 매물 접수 페이지
-누적 방문자 " + total + "명 달성! 🎉
-
-(5명 단위 알림)";
-  } else {
-    msg = "📌 방문자 카운트: " + total + "명째 방문";
-  }
-
-  fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-  })
-  .then(r => r.json())
-  .then(d => console.log("텔레그램 응답:", JSON.stringify(d)))
-  .catch(e => console.error("텔레그램 오류:", e));
+누적 방문자 " + total + "명 달성! 🎉";
+        fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+        })
+        .then(r => r.json())
+        .then(d => console.log("텔레그램 응답:", JSON.stringify(d)))
+        .catch(e => console.error("텔레그램 오류:", e));
+      }
+    })
+    .catch(e => console.error("hits.sh 오류:", e));
 })();
 
 const dealTypeSelect = document.getElementById("dealType");
