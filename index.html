@@ -68,7 +68,7 @@ Tel : <a href="tel:0317542348">031-754-2348</a><br>
 H.P : <a href="tel:01085214343">010-8521-4343</a><br>
 <span class="highlight">Blog : </span><a href="https://blog.naver.com/forexiirealestate">블로그 바로가기 <span class="highlight">Click</span></a><br><br>
 <span style="font-size:13px; opacity:0.85;">👀 방문자 수</span><br>
-<img src="https://hits.sh/baek1206.github.io/Receipt.svg?style=for-the-badge&label=%EB%B0%A9%EB%AC%B8%EC%9E%90&color=2b6cb0&labelColor=1a3a5c" alt="방문자 수" style="margin-top:6px;">
+<div id="hits-badge" style="margin-top:6px; height:28px;"></div>
 </div>
 
 <form id="listingForm">
@@ -127,26 +127,43 @@ var CHAT_ID = "5878163526";
   }
 
   var today = new Date().toISOString().slice(0, 10);
-  if (getCookie("vd") === today) {
-    console.log("오늘 이미 방문 카운트됨");
-    return;
-  }
-  setCookie("vd", today, 1);
+  var alreadyVisited = (getCookie("vd") === today);
 
-  var total = parseInt(getCookie("vc") || "0") + 1;
-  setCookie("vc", String(total), 3650);
-  console.log("누적 방문자:", total);
+  if (!alreadyVisited) {
+    // 오늘 첫 방문 - 카운트 증가 + 뱃지 이미지 로드(카운트 올림)
+    setCookie("vd", today, 1);
+    var total = parseInt(getCookie("vc") || "0") + 1;
+    setCookie("vc", String(total), 3650);
+    console.log("누적 방문자:", total);
 
-  if (total % 5 === 0) {
-    var msg = "[방문자 알림]\n\n포레자이우리 매물 접수 페이지\n누적 방문자 " + total + "명 달성!";
-    fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(d) { console.log("텔레그램:", d.ok, d.description || "OK"); })
-    .catch(function(e) { console.error("텔레그램 오류:", e); });
+    // hits.sh 뱃지 로드 (카운트 증가)
+    var img = new Image();
+    img.src = "https://hits.sh/baek1206.github.io/Receipt.svg?style=for-the-badge&label=%EB%B0%A9%EB%AC%B8%EC%9E%90&color=2b6cb0&labelColor=1a3a5c";
+    img.alt = "방문자 수";
+    img.style.marginTop = "6px";
+    document.getElementById("hits-badge").appendChild(img);
+
+    // 5명마다 텔레그램 알림
+    if (total % 5 === 0) {
+      var msg = "[방문자 알림]\n\n포레자이우리 매물 접수 페이지\n누적 방문자 " + total + "명 달성!";
+      fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: msg })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(d) { console.log("텔레그램:", d.ok, d.description || "OK"); })
+      .catch(function(e) { console.error("텔레그램 오류:", e); });
+    }
+  } else {
+    // 오늘 이미 방문 - 뱃지는 캐시된 이미지로 표시 (카운트 올리지 않음)
+    console.log("오늘 이미 방문 카운트됨 - 뱃지만 표시");
+    var total = parseInt(getCookie("vc") || "0");
+    var img = document.createElement("img");
+    img.src = "https://hits.sh/baek1206.github.io/Receipt.svg?style=for-the-badge&label=%EB%B0%A9%EB%AC%B8%EC%9E%90&color=2b6cb0&labelColor=1a3a5c&nocache=" + today;
+    img.alt = "방문자 수";
+    img.style.marginTop = "6px";
+    document.getElementById("hits-badge").appendChild(img);
   }
 })();
 
